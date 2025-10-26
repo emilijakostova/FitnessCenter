@@ -1,0 +1,43 @@
+﻿@model IEnumerable<FitnessCenter.Models.WorkoutPlan>
+
+@{
+    ViewBag.Title = "План за вежбање";
+}
+
+<h2>План за вежбање</h2>
+
+<p>
+    @Html.ActionLink("Создади нов запис", "Create")
+</p>
+<table class="table table-bordered table-striped mt-4">
+    <tr>
+        <th>Корисник</th>
+        <th>Програма</th>
+        <th>Почетен датум</th>
+        <th>Белешки</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @($"{item.User.FirstName} {item.User.LastName}")
+        </td>
+        <td>
+            @Html.ActionLink(item.WorkoutProgram.Name, "Details", "WorkoutPrograms", new { id = item.WorkoutProgram.Id }, null)
+        </td>
+        <td>
+            @item.StrartDate.ToString("dd.MM.yyyy")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.ActionLink("Измени", "Edit", new { id=item.Id }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Детали", "Details", new { id=item.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Избриши", "Delete", new { id=item.Id }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

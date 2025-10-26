@@ -1,0 +1,29 @@
+﻿@model FitnessCenter.Models.SupplementUsage
+@{
+    ViewBag.Title = "Уреди употреба";
+}
+<h2>Уреди употреба за: @ViewBag.SupplementName</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.Id)
+
+    <div>
+        <label for="Dosage">Конзумирана доза</label><br />
+        @Html.TextBoxFor(m=>m.Dosage, new {@class = "form-control"})
+    </div>
+    <br />
+    <div>
+        <label for="Notes">Белешки</label><br />
+        @Html.TextAreaFor(m=>m.Notes, new {@class = "form-control"})
+    </div>
+    <br />
+    <div>
+        <label for="DateStarted">Почетен датум</label><br />
+        @Html.TextBox("DateStarted",Model.DateStarted.ToString("yyyy-MM-dd"), new {@class = "form-control",type = "date"})
+    </div>
+    <br />
+    <button type="submit" class="btn btn-warning">Зачувај</button>
+    @Html.ActionLink("Назад","MyUsages",null,new {@class = "btn btn-light border-dark" })
+}
+

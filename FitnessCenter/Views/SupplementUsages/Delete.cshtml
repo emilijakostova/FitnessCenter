@@ -1,0 +1,21 @@
+﻿@model FitnessCenter.Models.SupplementUsage
+@{
+    ViewBag.Title = "Избриши употреба";
+}
+<h2>Избриши употреба</h2>
+<p>Сигурно ли сакате да ја избришете употребата на <strong>@Model.Supplement.Name</strong>?</p>
+
+<dl class="dl-horizontal">
+    <dt>Белешки:</dt>
+    <dd>@Model.Notes</dd>
+
+    <dt>Доза:</dt>
+    <dd>@Model.Dosage</dd>
+</dl>
+@using (Html.BeginForm())
+{ 
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Избриши</button>
+    @Html.ActionLink("Назад","MyUsages",null,new {@class = "btn btn-default"})
+}
+

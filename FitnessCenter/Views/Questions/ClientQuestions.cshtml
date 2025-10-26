@@ -1,0 +1,33 @@
+﻿@model IEnumerable<FitnessCenter.Models.Question>
+@{
+    ViewBag.Title = "Прашања од клиенти";
+}
+
+<h2>Прашања од ваши клиенти</h2>
+@foreach(var q in Model)
+{
+    <div class="card mb-3 p-3">
+        <p><strong>Член: </strong>
+            @Html.ActionLink(q.User.FirstName+" "+q.User.LastName,"Index","Profile",new {id = q.User.Id},null)
+        </p>
+        <p><strong>Прашање: </strong>@q.Text</p>
+        <p><small>@q.DateAsked.ToString("dd.MM.yyyy HH:mm")</small></p>
+
+        @if(!string.IsNullOrEmpty(q.Answer))
+        {
+            <p><strong>Одговор: </strong> @q.Answer</p>
+            <p><small>@(q.DateAnswered.HasValue ? q.DateAnswered.Value.ToString("dd.MM.yyyy HH:mm") : "")</small></p>
+        }
+        else
+        {
+            using (Html.BeginForm("Answer","Questions", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("id",q.Id)
+                <textarea name="Answer" class="form-control" required></textarea>
+                <button type="submit" class="btn btn-success mt-2">Одговори</button>
+            }
+        }
+    </div>
+}
+

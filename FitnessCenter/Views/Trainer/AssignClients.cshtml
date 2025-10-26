@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Додели клиенти";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Додели клиент</h2>
+<select id="clientSelect" class="form-control" style="width:300px; display: inline-block">
+    @foreach (var client in (SelectList)ViewBag.Clients)
+    {
+        <option value="@client.Value">@client.Text</option>
+    }
+</select>
+<button id="addClientButton" class="btn btn-primary">Додади клиент</button>
+<hr />
+<div id="clientListContainer">
+    @{
+        Html.RenderAction("GetMyClientsPartial", "Trainer");
+    }
+
+</div>
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $("#addClientButton").click(function () {
+        var clientId = $("#clientSelect").val();
+        var selectedOption = $("#clientSelect option:selected")
+        $.ajax({
+            url: '@Url.Action("AddClient","Trainer")',
+            type: 'POST',
+            data: { clientId: clientId },
+            success: function (partialViewHtml) {
+                $("#clientListContainer").html(partialViewHtml);
+                selectedOption.remove();
+            }
+        });
+    });
+    </script>
+}
+
+
+

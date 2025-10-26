@@ -1,0 +1,58 @@
+﻿@model FitnessCenter.Models.Exercise
+
+@{
+    ViewBag.Title = "Детали";
+}
+
+<h2>Детали</h2>
+
+<div>
+    <h4>Вежби</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt><label for="MuscleGroup">Мускулна група</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MuscleGroup)
+        </dd>
+
+        <dt><label for="Description">Опис</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            <label for="MediaUrl">URL-адреса (youtube video link)</label>
+        </dt>
+
+        <dd>
+            <td>
+                @{
+                    var videoUrl = Model.MediaUrl;
+                    var videoId = "";
+                    if (!string.IsNullOrEmpty(videoUrl))
+                    {
+                        var uri = new Uri(videoUrl);
+                        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+                        videoId = query["v"];
+                    }
+                    var thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/0.jpg";
+                }
+                @if (!string.IsNullOrEmpty(videoId))
+                {
+                    <a href="@videoUrl" target="_blank">
+                        <img src="@thumbnailUrl" alt="Video thumnail" class="img-thumbnail" style="width:300px; height:210px" />
+                    </a>
+                }
+                <br />
+                @Html.DisplayFor(model => model.MediaUrl)
+            </td>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Измени", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning me-3" })
+    @Html.ActionLink("Назад до листата", "Index", null, new { @class = "btn btn-light border-dark" })
+</p>

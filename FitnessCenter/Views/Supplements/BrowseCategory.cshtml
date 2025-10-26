@@ -1,0 +1,68 @@
+﻿@model List<FitnessCenter.Models.Supplement>
+@{
+    ViewBag.Title = "Суплементи по категорија";
+    var category = ViewBag.Category as string;
+    var currentPage = (int)(ViewBag.CurrentPage ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
+}
+
+<h2>Суплементи - @category</h2>
+<p><strong>Страна @currentPage од @totalPages</strong></p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Слика</th>
+            <th>Име</th>
+            <th>Цена</th>
+            <th>На залиха</th>
+            <th>Преглед</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var supplement in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@supplement.ImageUrl" alt="@supplement.Name" width="100" />
+                </td>
+                <td>@supplement.Name</td>
+                <td>
+                    @(supplement.Price.HasValue ? supplement.Price.Value.ToString("N2") + " ден" : "")
+                </td>
+                <td>
+                    @if (supplement.Availability)
+                    {
+                        <span style="color: #007bff;">✔ На залиха</span>
+                    }
+                    else
+                    {
+                        <span style="color: red;">✘ Нема</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="@supplement.ProductUrl" target="_blank">Погледни</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("AddUsage","SupplementUsages",new {supplementId = supplement.Id})" class="btn btn-success">✔ Го користам</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--Pagination-->
+<div class="d-flex justify-content-between mt-4">
+    @if (currentPage > 1)
+    {
+        <a class="btn btn-outline-secondary" href="@Url.Action("BrowseCategory", new { categoryName = category, page = currentPage - 1 })">⬅ Претходна</a>
+    }
+    else 
+    {
+        <span></span>
+    }
+    @if(currentPage < totalPages)
+    {
+            <a class="btn btn-outline-primary" href="@Url.Action("BrowseCategory", new { categoryName = category, page = currentPage + 1 })">Следна ➡</a>
+    }
+</div>

@@ -1,0 +1,127 @@
+﻿@model FitnessCenter.Models.WorkoutProgram
+
+@{
+    ViewBag.Title = "Детали";
+}
+
+<h2>Детали</h2>
+
+<div>
+    <h4>Програма за вежбање</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt><label for="Trainer.FirstName">Тренер</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Trainer.FirstName)
+        </dd>
+
+        <dt><label for="Name">Име на програма</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt><label for="Description">Опис</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt><label for="Level">Ниво</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Level)
+        </dd>
+
+        <dt><label for="DurationInDays">Времетраење во денови</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DurationInDays)
+        </dd>
+
+        <dt><label for="TargerGender">Наменето за</label></dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TargerGender)
+        </dd>
+
+    </dl>
+</div>
+<br />
+@if (User.IsInRole("Trainer"))
+{
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning me-3" })
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-light border-dark" })
+    </p>
+}
+else if (User.IsInRole("Member"))
+{
+    @Html.ActionLink("Назад", "Index", "WorkoutPlans", null, new { @class = "btn btn-light border-dark" })
+}
+<br />
+<div style="display: flex">
+    <div>
+        <h4>Вежби во програмата</h4>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: auto;">
+        @using (Html.BeginForm("AddExercise", "WorkoutPrograms"))
+        {
+            @Html.Hidden("WorkoutProgramId", Model.Id)
+            if (User.IsInRole("Trainer"))
+            {
+                @Html.DropDownList("ExerciseId", ViewBag.Exercises as SelectList, "Избери вежба", new { @class = "form-control" })
+                <button type="submit" class="btn btn-primary mt-2">Додади вежба</button>
+            }
+        }
+    </div>
+</div>
+<br />
+@if (Model.WorkoutProgramExercises != null && Model.WorkoutProgramExercises.Any())
+{
+    <table class="table">
+        <tr>
+
+            <th>Мускулна група</th>
+            <th>Опис</th>
+            <th>URL-адреса</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.WorkoutProgramExercises)
+        {
+            <tr>
+                <td>@item.Exercise.MuscleGroup</td>
+                <td>@item.Exercise.Description</td>
+                <td>
+                    @{
+                        var videoUrl = item.Exercise.MediaUrl;
+                        var videoId = "";
+                        if (!string.IsNullOrEmpty(videoUrl))
+                        {
+                            var uri = new Uri(videoUrl);
+                            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+                            videoId = query["v"];
+                        }
+                        var thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/0.jpg";
+                    }
+                    @if (!string.IsNullOrEmpty(videoId))
+                    {
+                        <a href="@videoUrl" target="_blank">
+                            <img src="@thumbnailUrl" alt="Video thumnail" class="img-thumbnail" style="width:300px; height:210px" />
+                        </a>
+                    }
+                </td>
+                @if (User.IsInRole("Trainer"))
+                {
+                    <td>@Html.ActionLink("Избриши", "RemoveExercise", new { workoutProgramId = Model.Id, exerciseId = item.ExerciseId }, new { @class = "btn btn-danger btn-sm" })</td>
+                }
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Нема додадени вежби за оваа програма.</p>
+}
+

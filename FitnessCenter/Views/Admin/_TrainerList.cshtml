@@ -1,0 +1,19 @@
+﻿@model List<FitnessCenter.Models.ApplicationUser>
+
+<table class="table table-bordered table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Име на корисник</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var trainer in Model)
+        {
+            <tr>
+                <td>@trainer.FirstName @trainer.LastName</td>
+                <td>@trainer.Email</td>
+            </tr>
+        }
+    </tbody>
+</table> 

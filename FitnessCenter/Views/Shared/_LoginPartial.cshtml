@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNet.Identity
+@using FitnessCenter.Models
+@if (Request.IsAuthenticated)
+{
+    var userId = User.Identity.GetUserId();
+    var dbContext = new ApplicationDbContext();
+    var user = dbContext.Users.Find(userId);
+    var fullName = user.FirstName + " " + user.LastName;
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="navbar-nav navbar-right">
+        <li><img src="~/Silhouette.png" / alt="" style="width:20px; height:37px; margin-right:4px; margin-top:7px; padding-bottom:10px"></li>
+        <li>@Html.ActionLink(fullName, "Index", "Profile", null, new { @class = "nav-link" })</li>
+        <li>@Html.ActionLink("⚙️ Поставувања", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })</li>
+        <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Одјави се</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="navbar-nav navbar-right">
+        <li>@Html.ActionLink("Регистрирај се", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-link" })</li>
+        <li>@Html.ActionLink("Најави се", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="nav-link" })</li>
+    </ul>
+}

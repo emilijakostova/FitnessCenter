@@ -1,0 +1,63 @@
+﻿@model IEnumerable<FitnessCenter.Models.WorkoutProgram>
+
+@{
+    ViewBag.Title = "Програми за вежбање";
+}
+
+<h2>Програми за вежбање</h2>
+
+<p>
+    @Html.ActionLink("Создади нов запис", "Create")
+</p>
+<table class="table table-bordered table-striped mt-4">
+    <tr>
+        <th>
+            <label for="Trainer.FirstName">Тренер</label>
+        </th>
+        <th>
+            <label for="Name">Програма</label>
+        </th>
+        <th>
+            <label for="Description">Опис</label>
+        </th>
+        <th>
+            <label for="Level">Ниво</label>
+        </th>
+        <th>
+            <label for="DurationInDays">Времетраење во денови</label>
+        </th>
+        <th>
+            <label for="TargerGender">Наменето за</label>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Trainer.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Level)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DurationInDays) 
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TargerGender)
+        </td>
+        <td>
+            @Html.ActionLink("Измени", "Edit", new { id=item.Id }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Детали", "Details", new { id=item.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Избриши", "Delete", new { id=item.Id }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

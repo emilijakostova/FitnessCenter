@@ -1,0 +1,46 @@
+﻿@model IEnumerable<FitnessCenter.Models.ProgressEntry>
+
+@{
+    ViewBag.Title = "Напредок";
+}
+
+<h2>Мојот прогрес</h2>
+
+<p>
+    @Html.ActionLink("Создади нов запис", "Create")
+</p>
+<table class="table table-bordered table-striped mt-4">
+    <tr>
+        <th>Корисник</th>
+        <th>Датум</th>
+        <th>Телесна маса</th>
+        <th>Мерења (Гради, Струк, Рака)</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @($"{item.User.FirstName} {item.User.LastName}")
+        </td>
+        <td>
+            @String.Format("{0:dd.MM.yyyy}", item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Weight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Measurements)
+        </td>
+        <td>
+            @Html.ActionLink("Измени", "Edit", new { id=item.Id }, new {@class = "btn btn-warning"}) 
+            @Html.ActionLink("Детали", "Details", new { id=item.Id }, new { @class = "btn btn-primary" }) 
+            @Html.ActionLink("Избриши", "Delete", new { id=item.Id }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
+<button type="button" class="btn btn-info">
+    @Html.ActionLink("График", "Chart", "ProgressEntries", null, new {@class = "text-light text-decoration-none"})
+</button>

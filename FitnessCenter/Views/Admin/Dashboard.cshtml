@@ -1,0 +1,24 @@
+﻿@model FitnessCenter.ViewModels.AdminDashboardViewModel
+@{
+    ViewBag.Title = "Админ панел";
+}
+
+<h2>Админ панел - статистики</h2>
+<p><strong>Вкупно корисници: </strong>@Model.TotalUsers</p>
+
+
+<h3>Најкористени програми</h3>
+<ul>
+    @foreach (var s in Model.TopPrograms)
+    {
+        <li>@s.ProgramName - @s.UsageCount пати</li>
+    }
+</ul>
+
+<h3>Најпопуларни суплементи</h3>
+<ul>
+    @foreach (var s in Model.TopSupplements)
+    {
+        <li>@s.SupplementName - @s.UsageCount пати</li>
+    }
+</ul>

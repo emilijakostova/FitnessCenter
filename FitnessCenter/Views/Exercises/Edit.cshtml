@@ -1,0 +1,50 @@
+﻿@model FitnessCenter.Models.Exercise
+
+@{
+    ViewBag.Title = "Измени";
+}
+
+<h2>Измени</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Вежби</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MuscleGroup, "Мускулна група", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.MuscleGroup, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MuscleGroup, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MediaUrl, "URL-адреса (youtube video link)", htmlAttributes: new { @class = "control-label col-md-2", style = "width: 280px" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MediaUrl, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MediaUrl, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Зачувај" class="btn btn-warning me-3" />
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-light border-dark" })
+            </div>
+        </div>
+    </div>
+}

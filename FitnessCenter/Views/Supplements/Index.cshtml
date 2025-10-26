@@ -1,0 +1,38 @@
+﻿@model IEnumerable<FitnessCenter.Models.Supplement>
+
+@{ 
+    ViewBag.Title = "Supplements";
+}
+
+<h2>Supplements</h2>
+<p>
+    @Html.ActionLink("Skrejpaj gi najnovite 5","Scrape",null,new {@class = "btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th>Slika</th>
+        <th>Ime</th>
+        <th>Cena</th>
+        <th>Link</th>
+        <th>На залиха</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><img src="@item.ImageUrl" width="100" /></td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td><a href="@item.ProductUrl" target="_blank">Pogledni</a></td>
+            <td>
+                @if(item.Availability)
+                {
+                    <span style="color:darkblue; font-size:30px;">✓</span>
+                }
+                else
+                {
+                    <span style="color:crimson; font-size:30px">✗</span>
+                }
+            </td>
+        </tr>
+    }
+</table>

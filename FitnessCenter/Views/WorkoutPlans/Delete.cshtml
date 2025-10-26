@@ -1,0 +1,48 @@
+﻿@model FitnessCenter.Models.WorkoutPlan
+
+@{
+    ViewBag.Title = "Избриши";
+}
+
+<h2>Избриши</h2>
+
+<h3>Дали сте сигурни дека сакате да го избришите овој план?</h3>
+<div>
+    <h4>План за вежбање</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Корисник</dt>
+
+        <dd>
+            @($"{Model.User.FirstName} {Model.User.LastName}")
+        </dd>
+
+        <dt>Програма</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkoutProgram.Name)
+        </dd>
+
+        <dt>Почетен датум</dt>
+
+        <dd>
+            @Model.StrartDate.ToString("dd.MM.yyyy")
+        </dd>
+
+        <dt>Белешки (денови за вежбање)</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Избриши" class="btn btn-danger me-3" />
+            @Html.ActionLink("Назад до листата", "Index", null, new { @class = "btn btn-light border-dark" })
+        </div>
+    }
+</div>

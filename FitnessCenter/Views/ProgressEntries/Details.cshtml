@@ -1,0 +1,42 @@
+﻿@model FitnessCenter.Models.ProgressEntry
+
+@{
+    ViewBag.Title = "Детали";
+}
+
+<h2>Детали</h2>
+
+<div>
+    <h4>Напредок</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Корисник</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+        </dd>
+
+        <dt>Датум</dt>
+
+        <dd>
+            @Model.Date.ToString("dd.MM.yyyy")
+        </dd>
+
+        <dt>Телесна маса</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+
+        <dt>Мерења (Гради, Струк, Рака)</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Measurements)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Измени", "Edit", new { id = Model.Id }, new {@class = "btn btn-warning me-3" })
+    @Html.ActionLink("Назад до листата", "Index", null, new {@class = "btn btn-light border-dark"})
+</p>

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("Faraon Fitness Center", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    @if (User.IsInRole("Member"))
+                    {
+                        <li>@Html.ActionLink("Напредок", "Index", "ProgressEntries", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Тренинзи", "Index", "WorkoutPlans", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Суплементи", "Browse", "Supplements", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Прашања", "MyQuestions", "Questions", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+                    else if (User.IsInRole("Trainer"))
+                    {
+                        <li>@Html.ActionLink("Клиенти", "AssignClients", "Trainer", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Вежби", "Index", "Exercises", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Програми", "Index", "WorkoutPrograms", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Тренинг", "Index", "WorkoutPlans", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Суплементи", "Browse", "Supplements", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Прашања", "ClientQuestions", "Questions", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+                    else if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Тренери", "AddTrainer", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Админ панел", "Dashboard", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+                </ul>
+                 @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Емилија Костова</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

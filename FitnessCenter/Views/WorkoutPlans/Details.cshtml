@@ -1,0 +1,42 @@
+﻿@model FitnessCenter.Models.WorkoutPlan
+
+@{
+    ViewBag.Title = "Детали";
+}
+
+<h2>Детали</h2>
+
+<div>
+    <h4>План за вежбање</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Корисник</dt>
+
+        <dd>
+            @($"{Model.User.FirstName} {Model.User.LastName}")
+        </dd>
+
+        <dt>Програма</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkoutProgram.Name)
+        </dd>
+
+        <dt>Почетен датум</dt>
+
+        <dd>
+            @Model.StrartDate.ToString("dd.MM.yyyy")
+        </dd>
+
+        <dt>Белешки (денови за вежбање)</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Измени", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning me-3" })
+    @Html.ActionLink("Назад до листата", "Index", null, new { @class = "btn btn-light border-dark" })
+</p>

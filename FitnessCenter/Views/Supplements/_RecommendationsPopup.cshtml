@@ -1,0 +1,12 @@
+﻿@model List<string>
+<div class="recommendation-popup">
+    <h6>Според вашата цел, ви ги препорачуваме следниве категории на суплементи:</h6>
+    <ul>
+        @foreach(var category in Model)
+        {
+            <li>
+                <a href="@Url.Action("BrowseCategory","Supplements",new {categoryName = category})">@category</a>
+            </li>
+        }
+    </ul>
+</div>

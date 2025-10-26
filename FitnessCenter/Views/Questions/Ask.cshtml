@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Постави прашање";
+}
+
+<h2>Постави прашање до тренерот: @ViewBag.TrainerName</h2>
+@using(Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.Label("Прашање")
+        <textarea name="Text" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Испрати</button>
+}
+

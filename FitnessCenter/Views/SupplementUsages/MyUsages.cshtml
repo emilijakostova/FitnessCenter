@@ -1,0 +1,161 @@
+﻿@model IEnumerable<FitnessCenter.Models.SupplementUsage>
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Мои суплементи";
+}
+
+<table class="table table-bordered table-striped" id="myUsagesTable">
+    <thead>
+        <tr>
+            <th>Суплемент</th>
+            <th>Датум</th>
+            <th>Доза</th>
+            <th>Белешка</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usage in Model)
+        {
+            <tr>
+                <td>@usage.Supplement.Name</td>
+                <td>@usage.DateStarted.ToString("dd.MM.yyyy")</td>
+                <td>@usage.Dosage</td>
+                <td>@usage.Notes</td>
+                <td>
+                    @Html.ActionLink("Уреди", "Edit", new { id = usage.Id }, new { @class = "btn btn-sm btn-warning" })
+                    @Html.ActionLink("Избриши", "Delete", new { id = usage.Id }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+                <td>
+                    @{
+                        var review = usage.Supplement.Reviews?.FirstOrDefault(r => r.UserId == User.Identity.GetUserId());
+                        if (review != null)
+                        {
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= review.Rating)
+                                {
+                                    @:<span class="text-warning" style="font-size:20px">★</span>
+                                }
+                                else
+                                {
+                                    @:<span style="font-size:20px">☆</span>
+                                }
+                            }
+                            <button class="btn btn-sm btn-danger delete-review-btn" data-id="@usage.SupplementId" style="margin-left:10px">Избриши рецензија</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm brn-primary rate-btn" data-id="@usage.SupplementId" data-name="@usage.Supplement.Name">
+                                ☆ Оцени
+                            </button>
+                        }
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="ratingModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="ratingForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Оцени суплемент</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="supplementId" name="SupplementId" />
+                    <div id="starRating" class="mb-3 text-warning" style="font-size:24px; cursor: pointer;"></div>
+                    <input type="hidden" id="rating" name="Rating" />
+                    <textarea class="form-control" name="Comment" placeholder="Рецензија: "></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Зачувај</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        let selectedRating = 0;
+        const renderStars = (rating) => {
+            let html = "";
+            for (let i = 1; i <= 5; i++) {
+                html += `<span class="star" data-value="${i}">${i<=rating?'★':'☆'}</span>`
+            }
+            document.getElementById('starRating').innerHTML = html;
+        };
+
+        $(document).on('click', '.rate-btn', function () {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            $('#supplementId').val(id);
+            $('.modal-title').text(`Оцени суплемент (${name})`);
+            renderStars(0);
+            $('#ratingModal').modal('show')
+        });
+
+        $(document).on('click', '.star', function () {
+            selectedRating = $(this).data('value');
+            $('#rating').val(selectedRating);
+            renderStars(selectedRating);
+        });
+
+        $('#ratingForm').submit(function (e) {
+            e.preventDefault();
+            $.post('/SupplementReviews/SubmitReview', $(this).serialize(), function () {
+                $('#ratingModal').modal('hide');
+                alert('Рецензијата е зачувана!');
+                location.reload();
+            });
+        });
+
+        $(document).on('click', '.delete-review-btn', function () {
+            if (confirm('Дали сте сигурни дека сакате да ја избришете рецензијата?')) {
+                const supplementId = $(this).data('id');
+                $.ajax({
+                    url: '/SupplementReviews/DeleteReview',
+                    type: 'POST',
+                    data: { supplementId: supplementId },
+                    success: function () {
+                        location.reload();
+                    }
+                })
+            }
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#myUsagesTable").DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "Нема податоци во табелата",
+                    "info": "Прикажани _START_ до _END_ од вкупно _TOTAL_ записи",
+                    "infoEmpty": "Прикажани 0 до 0 од 0 записи",
+                    "infoFiltered": "(филтрирано од вкупно _MAX_ записи)",
+                    "lengthMenu": "Прикажи _MENU_ записи",
+                    "loadingRecords": "Вчитување...",
+                    "processing": "Обработка...",
+                    "search": "Пребарај:",
+                    "zeroRecords": "Нема совпаѓачки записи",
+                    "paginate": {
+                        "first": "Прва",
+                        "last": "Последна",
+                        "next": "Следна",
+                        "previous": "Претходна"
+                    },
+                    "aria": {
+                        "sortAscending": ": активирај за растечки редослед",
+                        "sortDescending": ": активирај за опаѓачки редослед"
+                    }
+                }
+            });
+        })
+    </script>
+}

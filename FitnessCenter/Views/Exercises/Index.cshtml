@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FitnessCenter.Models.Exercise>
+
+@{
+    ViewBag.Title = "Вежби";
+}
+
+<h2>Вежби</h2>
+
+<p>
+    @Html.ActionLink("Додади нова вежба", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th><label for="MuscleGroup">Мускулна група</label></th>
+        <th><label for="Description">Опис</label></th>
+        <th>
+            <label for="MediaUrl">URL-адреса (youtube video link)</label>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MuscleGroup)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @{ 
+                var videoUrl = item.MediaUrl;
+                var videoId = "";
+                if(!string.IsNullOrEmpty(videoUrl))
+                {
+                    var uri = new Uri(videoUrl);
+                    var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+                    videoId = query["v"];
+                }
+                var thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/0.jpg";
+            }
+            @if (!string.IsNullOrEmpty(videoId))
+                {
+                    <a href="@videoUrl" target="_blank">
+                        <img src="@thumbnailUrl" alt="Video thumnail" class="img-thumbnail" style="width:300px; height:210px"/>
+                    </a>
+                }
+
+        </td>
+        <td>
+            @Html.ActionLink("Измени", "Edit", new { id=item.Id }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Детали", "Details", new { id=item.Id }, new { @class = "btn btn-primary" }) 
+            @Html.ActionLink("Избриши", "Delete", new { id=item.Id }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

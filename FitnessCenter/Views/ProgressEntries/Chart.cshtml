@@ -1,0 +1,116 @@
+﻿@model IEnumerable<FitnessCenter.Models.ProgressEntry>
+
+@{
+    ViewBag.Title = "График за следење на прогрес";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Следење на прогрес</h2>
+
+<div style="display: flex; gap: 20px; margin-top: 50px; margin-bottom:50px;flex-wrap: wrap; justify-content: center;">
+    <div style="flex:1; min-width: 300px;max-width:50%">
+        <canvas id="weightChart"></canvas>
+    </div>
+    <div style="flex:1; min-width: 300px;max-width:50%">
+        <canvas id="measurementsChart"></canvas>
+    </div>
+</div>
+
+@{ 
+    var dates = Model.Select(p => p.Date.ToString("dd.MM.yyyy")).ToList();
+    List<double?> chestList = new List<double?>();
+    List<double?> waistList = new List<double?>();
+    List<double?> armList = new List<double?>();
+
+    foreach(var p in Model)
+    {
+        var cleaned = (p.Measurements ?? "").Replace(" ", "");
+        var parts = cleaned.Split(',');
+        if(parts.Length==3&&
+                double.TryParse(parts[0],out double chest) &&
+                double.TryParse(parts[1],out double waist) &&
+                double.TryParse(parts[2],out double arm))
+        {
+            chestList.Add(chest);
+            waistList.Add(waist);
+            armList.Add(arm);
+        }
+    }
+}
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const context1 = document.getElementById("weightChart").getContext("2d");
+        const context2 = document.getElementById("measurementsChart").getContext("2d");
+        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(dates));
+        const weights = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(p => p.Weight)));
+        const chest = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(chestList));
+        const waist = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(waistList));
+        const arm = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(armList));
+
+        new Chart(context1,
+            {
+                type: 'line',
+                data:
+                {
+                    labels: labels,
+                    datasets:
+                        [{
+                            label: 'Тежина (kg)',
+                            data: weights,
+                            borderColor: 'rgb(75,192,192)',
+                            tension: 0.3,
+                            fill: false,
+                            borderWidth: 3
+                        }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: 'Датум' }},
+                        y: { title: { display: true, text: 'Тежина (kg)' }}
+                    }
+                }
+            });
+        new Chart(context2,
+        {
+            type: 'line',
+            data:
+            {
+                labels: labels,
+                datasets:
+                    [{
+                        label: 'Гради (cm)',
+                        data: chest,
+                        borderColor: 'rgb(255,99,132)',
+                        tension: 0.3,
+                        fill: false,
+                    },
+                    {
+                        label: 'Струк (cm)',
+                        data: waist,
+                        borderColor: 'rgb(54,162,235)',
+                        tension: 0.3,
+                        fill: false,
+                    },
+                    {
+                        label: 'Рака (cm)',
+                        data: arm,
+                        borderColor: 'rgb(255,206,86)',
+                        tension: 0.3,
+                        fill: false,
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Датум' }},
+                    y: { title: { display: true, text: 'Мерења (cm)' }}
+                }
+            }
+        });
+    </script>
+}

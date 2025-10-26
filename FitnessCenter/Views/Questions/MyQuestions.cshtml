@@ -1,0 +1,34 @@
+﻿@model IEnumerable<FitnessCenter.Models.Question>
+@{
+    ViewBag.Title = "Мои прашања";
+}
+
+<h2>Мои прашања</h2>
+
+@foreach (var q in Model)
+{
+    <div class="card mb-3 p-3">
+        <p><strong>Прашање: </strong>@q.Text</p>
+        <p><small>Поставено: @q.DateAsked.ToString("dd.MM.yyyy HH:mm")</small></p>
+
+        @if (!string.IsNullOrEmpty(q.Answer))
+        {
+            <p><strong>Одговор: </strong>@q.Answer</p>
+            <p><small>Одговорено: @(q.DateAnswered?.ToString("dd.MM.yyyy HH:mm")??"")</small></p>
+        }
+        else
+        {
+            <p><em>Се чека одговор од тренерот...</em></p>
+        }
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.TrainerName) && ViewBag.TrainerName != "Сè уште немате назначен тренер.")
+{
+    <a href="@Url.Action("Ask")" class="btn btn-success">Постави прашање до тренерот @ViewBag.TrainerName</a>
+
+}
+else
+{
+    <p class="text-muted">Сè уште немате назначен тренер, па не можете да поставувате прашања.</p>
+}

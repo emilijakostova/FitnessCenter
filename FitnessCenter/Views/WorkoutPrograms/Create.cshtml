@@ -1,0 +1,72 @@
+﻿@model FitnessCenter.Models.WorkoutProgram
+
+@{
+    ViewBag.Title = "Креирај";
+}
+
+<h2>Создади нов запис</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Програма за вежбање</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Име на програма", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Level, "Ниво", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model=>model.Level,new SelectList(new[] {"Почетник","Средно","Напредно"}),"", new {@class="form-control"})
+                @Html.ValidationMessageFor(model => model.Level, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DurationInDays, "Времетраење (во денови)", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DurationInDays, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DurationInDays, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.Label("TargerGender", "Наменето за", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.TargerGender, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TargerGender, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TrainerId, "Тренер", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("TrainerId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TrainerId, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Креирај" class="btn btn-dark border-light text-white me-3" />
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-light border-dark" })
+            </div>
+        </div>
+    </div>
+}

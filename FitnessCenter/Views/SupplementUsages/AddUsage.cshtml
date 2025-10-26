@@ -1,0 +1,39 @@
+﻿@model FitnessCenter.Models.SupplementUsage
+@{
+    ViewBag.Title = "Додај употреба на суплемент";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.SupplementId)
+
+    <table class="table table-borderless">
+        <tr>
+            <td>
+                <label style="display:block" for="DateStarted">Почетен датум</label>
+                @Html.TextBoxFor(model => model.DateStarted, new { @type = "date", @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label style="display:block" for="Dosage">Конзумирана доза</label>
+                @Html.TextBoxFor(model => model.Dosage, new {@class = "form-control"})
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label style="display:block" for="Notes">Белешки</label>
+                @Html.TextAreaFor(model => model.Notes, new {@class = "form-control", rows=4})
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" class="btn btn-primary">Зачувај</button>
+            </td>
+        </tr>
+    </table>
+}
+

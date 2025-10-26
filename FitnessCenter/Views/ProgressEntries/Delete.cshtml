@@ -1,0 +1,46 @@
+﻿@model FitnessCenter.Models.ProgressEntry
+
+@{
+    ViewBag.Title = "Избриши";
+}
+
+<h2>Избриши</h2>
+
+<h3>Дали сте сигурни дека сакате да го избришите овој запис?</h3>
+<div>
+    <h4>Напредок</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Корисник</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+        </dd>
+
+        <dt>Датум</dt>
+
+        <dd>@Model.Date.ToString("dd.MM.yyyy")</dd>
+
+        <dt>Телесна маса</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+
+        <dt>Мерења (Гради, Струк, Рака)</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Measurements)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Избриши" class="btn btn-danger me-3" />
+            @Html.ActionLink("Назад до листата", "Index", null, new { @class = "btn btn-light border-dark" })
+        </div>
+    }
+</div>

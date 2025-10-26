@@ -1,0 +1,56 @@
+﻿@model FitnessCenter.Models.WorkoutPlan
+
+@{
+    ViewBag.Title = "Креирај";
+}
+
+<h2>Создади нов запис</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Внеси план за вежбање</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.WorkoutProgramId, "Програма", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.WorkoutProgramId, (SelectList)ViewBag.WorkoutProgramId, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.WorkoutProgramId, "", new { @class = "text-danger" })
+        </div>
+    </div><br />
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Корисник</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@ViewBag.UserFullName</p>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.UserId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.StrartDate, "Почетен датум", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.StrartDate, new { @class = "form-control", type = "date", value = Model.StrartDate.ToString("yyyy/MM/dd") })
+            @Html.ValidationMessageFor(model => model.StrartDate, "", new { @class = "text-danger" })
+        </div>
+    </div><br />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Notes, "Белешки (денови за вежбање)", htmlAttributes: new { @class = "control-label col-md-2", style = "width: 280px" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", style ="width: 280px", placeholder = "Пр. Вторник, четврток, сабота" } )
+            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+        </div>
+    </div><br />
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Креирај" class="btn btn-dark border-light text-white me-3" />
+            @Html.ActionLink("Назад до листата", "Index", null, new { @class = "btn btn-light border-dark" })
+        </div>
+    </div>
+</div>
+}
